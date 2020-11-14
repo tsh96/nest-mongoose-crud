@@ -4,6 +4,10 @@ import { CrudService } from "./crud.service";
 export class CrudController<Service extends CrudService, FilterQuery> {
   constructor(protected readonly service: Service) { }
 
+  async createOne(bodies: any) {
+    return this.service.createOne(bodies)
+  }
+
   async createMany(bodies: any[]) {
     return this.service.createMany(bodies)
   }
@@ -16,8 +20,8 @@ export class CrudController<Service extends CrudService, FilterQuery> {
     return this.service.findMany(filter, limit, skip, sort, select)
   }
 
-  async updateOne(id: string, body: any) {
-    return this.service.updateOne(id, body)
+  async updateById(id: string, body: any) {
+    return this.service.updateById(id, body)
   }
 
   async updateMany(filter: FilterQuery, bodies: any[]) {

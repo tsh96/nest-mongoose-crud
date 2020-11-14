@@ -19,7 +19,7 @@ export class CrudService {
     return this.model.find(filter).limit(limit).skip(skip).sort(sort).select(select).lean().exec()
   }
 
-  async updateOne(id: string, query: any) {
+  async updateById(id: string, query: any) {
     return this.model.updateOne({ _id: id }, query).exec()
   }
 

@@ -29,11 +29,20 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
     const deleteManyResponse = Reflect.getMetadata(DELETE_MANY_RESPONSE, crudService);
 
     const applyDecorators = {
+      createOne() {
+        const createOne = Reflect.getOwnPropertyDescriptor(proto, 'createOne');
+        ApiBody({ type: createDto })(proto, 'createOne', createOne);
+        ApiOkResponse({ type: [createResponse] })(proto, 'createOne', createOne);
+        Post()(proto, 'createOne', createOne);
+        AuthActions('CreateMany', 'CreateOne')(proto, 'createOne', createOne);
+        Body()(proto, 'createOne', 0);
+        Reflect.defineMetadata('design:paramtypes', [createDto], proto, "createOne");
+      },
       createMany() {
         const createMany = Reflect.getOwnPropertyDescriptor(proto, 'createMany');
         ApiBody({ type: [createDto] })(proto, 'createMany', createMany);
         ApiOkResponse({ type: [createResponse] })(proto, 'createMany', createMany);
-        Post()(proto, 'createMany', createMany);
+        Post('bulk')(proto, 'createMany', createMany);
         AuthActions('CreateMany')(proto, 'createMany', createMany);
         Body(new ParseArrayPipe({ items: createDto }))(proto, 'createMany', 0);
         Reflect.defineMetadata('design:paramtypes', [Array], proto, "createMany");
@@ -102,7 +111,7 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
       }
     };
 
-    const crudOperators = ['createMany', 'findById', 'findMany', 'updateOne', 'updateMany', 'deleteById', 'deleteMany'];
+    const crudOperators = ['createOne', 'createMany', 'findById', 'findMany', 'updateOne', 'updateMany', 'deleteById', 'deleteMany'];
     crudOperators.forEach(operator => {
       if (!proto.hasOwnProperty(operator)) {
         const protoFunc = proto[operator];
