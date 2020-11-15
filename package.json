@@ -1,6 +1,6 @@
 {
-  "name": "nest-mongoose-crud",
-  "version": "1.0.0",
+  "name": "@tsh96/nest-mongoose-crud",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "dependencies": {

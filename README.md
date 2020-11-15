@@ -24,12 +24,14 @@ Yarn (Recommended)
 
 ```bash
 yarn add @tsh96/nest-mongoose-crud class-transformer class-validator @nestjs/swagger @nestjs/mongoose mongoose
+yarn add -D @types/mongoose
 ```
 
 Npm
 
 ```bash
 npm install @tsh96/nest-mongoose-crud class-transformer class-validator @nestjs/swagger @nestjs/mongoose mongoose
+npm install @types/mongoose
 ```
 
 # Getting started
