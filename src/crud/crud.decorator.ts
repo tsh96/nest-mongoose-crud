@@ -1,12 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { ApiBody, ApiQuery, ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { ApiBody, ApiQuery, ApiOkResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
 import { AuthActions } from "../auth/action.decorator";
 import { CREATE_DTO, CREATE_RESPONSE, DELETE_BY_ID_RESPONSE, DELETE_MANY_RESPONSE, FIND_BY_ID_RESPONSE, FIND_MANY_FILTER, FIND_MANY_RESPONSE, FIND_MANY_SELECT_ENUM, UPDATE_DTO, UPDATE_MANY_FILTER, UPDATE_MANY_RESPONSE, UPDATE_ONE_RESPONSE } from "../constants";
 
 
-export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
+export function Crud(prefix: string, { crudService, ParseArrayPipe, ParseIntPipe }: {
   crudService: any;
   ParseArrayPipe: any;
+  ParseIntPipe: any;
 }): ClassDecorator {
   return (crudController) => {
 
@@ -57,7 +58,7 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
       },
       findMany() {
         const findMany = Reflect.getOwnPropertyDescriptor(proto, 'findMany');
-        ApiQuery({ name: "filter", type: findManyFilter, required: false })(proto, 'findMany', findMany);
+        ApiQuery({ name: "filter", schema: { $ref: getSchemaPath(findManyFilter) }, required: false })(proto, 'findMany', findMany);
         ApiQuery({ name: "limit", type: Number, required: false })(proto, 'findMany', findMany);
         ApiQuery({ name: "sort", type: [String], required: false })(proto, 'findMany', findMany);
         ApiQuery({ name: "skip", type: Number, required: false })(proto, 'findMany', findMany);
@@ -66,11 +67,11 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
         Get()(proto, 'findMany', findMany);
         AuthActions('ReadMany')(proto, 'findMany', findMany);
         Query('filter')(proto, 'findMany', 0);
-        Query('limit')(proto, 'findMany', 1);
-        Query('skip')(proto, 'findMany', 2);
+        Query('limit', new DefaultValuePipe(200), ParseIntPipe)(proto, 'findMany', 1);
+        Query('skip', new DefaultValuePipe(0), ParseIntPipe)(proto, 'findMany', 2);
         Query('sort')(proto, 'findMany', 3);
         Query('select')(proto, 'findMany', 4);
-        Reflect.defineMetadata('design:paramtypes', [findManyFilter, Number, Number, Array, Array], proto, "findMany");
+        Reflect.defineMetadata('design:paramtypes', [Object, Number, Number, Array, Array], proto, "findMany");
       },
       updateOne() {
         const updateOne = Reflect.getOwnPropertyDescriptor(proto, 'updateOne');
@@ -84,14 +85,14 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe }: {
       },
       updateMany() {
         const updateMany = Reflect.getOwnPropertyDescriptor(proto, 'updateMany');
-        ApiQuery({ name: 'filter', type: updateManyFilter })(proto, 'updateMany', updateMany);
+        ApiQuery({ name: 'filter', schema: { $ref: getSchemaPath(updateManyFilter) } })(proto, 'updateMany', updateMany);
         ApiBody({ type: updateDto })(proto, 'updateMany', updateMany);
         ApiOkResponse({ type: updateManyResponse })(proto, 'updateMany', updateMany);
         Put()(proto, 'updateMany', updateMany);
         AuthActions('UpdateMany')(crudController, 'updateMany', updateMany);
         Query('filter')(proto, 'updateMany', 0);
         Body()(proto, 'updateMany', 1);
-        Reflect.defineMetadata('design:paramtypes', [updateManyFilter, updateDto], proto, "updateMany");
+        Reflect.defineMetadata('design:paramtypes', [Object, updateDto], proto, "updateMany");
       },
       deleteById() {
         const deleteById = Reflect.getOwnPropertyDescriptor(proto, 'deleteById');
