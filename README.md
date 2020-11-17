@@ -15,6 +15,7 @@ This package provides several decorators and classes for endpoints generation, m
 - Overriding or inherit controller methods with ease
 - Tiny config
 - Swagger documentation
+- Code Generator
 
 # Install
 
@@ -35,6 +36,18 @@ npm install @types/mongoose
 ```
 
 # Getting started
+
+## Codegen
+
+Codegen is a handy tool to generate code for controller, dto, module, schema and service.
+
+```bash
+yarn codegen [resource] [path?]
+```
+
+For example `yarn codegen cat` will create a files under `src/cat` folder and `yarn codegen puppy d1/d2` will create a files under `src/d1/d2`
+
+## Manually
 
 Create a mongoose schema
 
