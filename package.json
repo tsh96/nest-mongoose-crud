@@ -2,6 +2,9 @@
   "name": "@tsh96/nest-mongoose-crud",
   "version": "1.0.2",
   "license": "MIT",
+  "bin": {
+    "codegen": "dist/codegen/index.js"
+  },
   "main": "dist/index.js",
   "dependencies": {
     "@nestjs/common": "^7.0.0",
