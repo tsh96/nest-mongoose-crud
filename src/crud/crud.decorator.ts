@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { ApiBody, ApiQuery, ApiOkResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import { ApiBody, ApiQuery, ApiOkResponse, ApiTags, getSchemaPath, ApiExtraModels } from "@nestjs/swagger";
 import { AuthActions } from "../auth/action.decorator";
 import { CREATE_DTO, CREATE_RESPONSE, DELETE_BY_ID_RESPONSE, DELETE_MANY_RESPONSE, FIND_BY_ID_RESPONSE, FIND_MANY_FILTER, FIND_MANY_RESPONSE, FIND_MANY_SELECT_ENUM, UPDATE_DTO, UPDATE_MANY_FILTER, UPDATE_MANY_RESPONSE, UPDATE_ONE_RESPONSE } from "../constants";
 
@@ -58,6 +58,7 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe, ParseIntPipe
       },
       findMany() {
         const findMany = Reflect.getOwnPropertyDescriptor(proto, 'findMany');
+        ApiExtraModels(findManyFilter)(proto, 'findMany', findMany);
         ApiQuery({ name: "filter", schema: { $ref: getSchemaPath(findManyFilter) }, required: false })(proto, 'findMany', findMany);
         ApiQuery({ name: "limit", type: Number, required: false })(proto, 'findMany', findMany);
         ApiQuery({ name: "sort", type: [String], required: false })(proto, 'findMany', findMany);
@@ -85,6 +86,7 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe, ParseIntPipe
       },
       updateMany() {
         const updateMany = Reflect.getOwnPropertyDescriptor(proto, 'updateMany');
+        ApiExtraModels(updateManyFilter)(proto, 'updateMany', updateMany)
         ApiQuery({ name: 'filter', schema: { $ref: getSchemaPath(updateManyFilter) } })(proto, 'updateMany', updateMany);
         ApiBody({ type: updateDto })(proto, 'updateMany', updateMany);
         ApiOkResponse({ type: updateManyResponse })(proto, 'updateMany', updateMany);
