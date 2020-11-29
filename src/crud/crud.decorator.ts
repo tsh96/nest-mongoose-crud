@@ -33,7 +33,7 @@ export function Crud(prefix: string, { crudService, ParseArrayPipe, ParseIntPipe
       createOne() {
         const createOne = Reflect.getOwnPropertyDescriptor(proto, 'createOne');
         ApiBody({ type: createDto })(proto, 'createOne', createOne);
-        ApiOkResponse({ type: [createResponse] })(proto, 'createOne', createOne);
+        ApiOkResponse({ type: createResponse })(proto, 'createOne', createOne);
         Post()(proto, 'createOne', createOne);
         AuthActions('CreateMany', 'CreateOne')(proto, 'createOne', createOne);
         Body()(proto, 'createOne', 0);
