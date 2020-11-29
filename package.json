@@ -5,6 +5,10 @@
   "bin": {
     "codegen": "dist/codegen/index.js"
   },
+  "homepage": "https://github.com/tsh96/nest-mongoose-crud",
+  "bugs": {
+    "url": "https://github.com/tsh96/nest-mongoose-crud"
+  },
   "main": "dist/index.js",
   "dependencies": {
     "@nestjs/common": "^7.0.0",
